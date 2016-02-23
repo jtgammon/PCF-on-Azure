@@ -144,7 +144,8 @@ To create and manage Azure resources on the command line, we need to install the
  * If you are using Windows, it is suggested that you use **command line** but not PowerShell to run Azure CLI
 2. Configure Azure CLI
  * Because the Azure Resource Manager mode is not enabled by default, use the following command to enable Azure CLI Resource Manager commands.
- * > azure config mode arm
+
+    > azure config mode arm
 
 3. Login
 
