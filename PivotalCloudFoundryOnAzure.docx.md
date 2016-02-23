@@ -71,9 +71,9 @@ For a production deployment, Pivotal recommends the Azure Load Balancer pools to
 
 * A typical **multi-VM** Pivotal Cloud Foundry install requires upwards of 25 VMs or more.
 * **This requires Increased Azure quotas**, preferably within a **region** with premium storage (e.g East US 2), with the following quotas as safe for a small installation:
-    * Total Regional Cores      	100
-    * Standard-A Family Cores	50
-    * Standard-D Family Cores	50
+    * Total Regional Cores:  100
+    * Standard-A Family Cores:	50
+    * Standard-D Family Cores:	50
 
 * Via ARM template or Azure CLI / Portal**, an Azure Resource Group**, including:
     * **Virtual Network** and **Subnet**
@@ -139,19 +139,12 @@ Azure CPI provisions resources in Azure using the Azure Resource Manager (ARM) A
 
 To create and manage Azure resources on the command line, we need to install the Azure CLI.
 
-1. Install and configure Azure CLI using the documentation that can be found **[HER**E](https://azure.microsoft.com/en-us/documentation/articles/xplat-cli-install/)
-
-**NOTE: **
-
-* It is suggested to run Azure CLI using Ubuntu Server 14.04 LTS or Windows 10.
-
-* If you are using Windows, it is suggested that you use **command line** but not PowerShell to run Azure CLI
-
+1. Install and configure Azure CLI using the documentation that can be found [HERE](https://azure.microsoft.com/en-us/documentation/articles/xplat-cli-install/)
+ * It is suggested to run Azure CLI using Ubuntu Server 14.04 LTS or Windows 10.
+ * If you are using Windows, it is suggested that you use **command line** but not PowerShell to run Azure CLI
 2. Configure Azure CLI
-
-Because the Azure Resource Manager mode is not enabled by default, use the following command to enable Azure CLI Resource Manager commands.
-
-> azure config mode arm
+  Because the Azure Resource Manager mode is not enabled by default, use the following command to enable Azure CLI Resource Manager commands.
+  > azure config mode arm
 
 3. Login
 
@@ -718,5 +711,4 @@ You can SSH from the devbox to the CF VM using the private key:
 Or you can CF login with username/password of admin/c1oudc0w:
 
 > cf login -a https://api.johngammon.com --skip-ssl-validation
-
 
