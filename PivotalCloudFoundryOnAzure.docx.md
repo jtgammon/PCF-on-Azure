@@ -329,82 +329,65 @@ Example:
 
 The Azure Resource Manager (ARM) template allows you to quickly deploy the necessary infrastructure for deploying Bosh and CloudFoundry. This template will create everything needed from scratch, so there is no need to have network, storage or VM's pre-configured before running this.
 
-Click this link to deploy the template:
+Click [this](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-quickstart-templates%2Fmaster%2Fbosh-setup%2Fazuredeploy.json) link to deploy the template:
 
 <img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_6.png">
 
 <img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_7.png">
 
 ### Virtual Machine
-
 The template will create a jump box on the Bosh network. In this example it will be called "devbox". The VM will have 1 core, 3.5GB RAM, and 50GB of SSD storage. This jumpbox will be used to deploy the Bosh Director and CloudFoundry. The jumpbox will have a public IP that can be used to SSH, and the template form allows the username and password to be specified.
 
 ### Admin Username
-
 A username for the jump box VM.
 
 ### SSH Key Data
-
 Provide a public key for the jump box VM. You should generate a private/public key pair, and keep the private key securely on your local machine. The parameter sshKeyData should be a string which starts with ssh-rsa.
 
 Use ssh-keygen to create a 2048-bit RSA public and private key files, and unless you have a specific location or specific names for the files, accept the default location and name.
 
-> ssh-keygen -t rsa -b 2048
+    > ssh-keygen -t rsa -b 2048
 
 ### Tenant ID
-
 Specify the tenant ID for the subscription to be used. This can be found from the Azure CLI.
 
-**> azure account list**
+    > azure account list
 
+<pre><code>
 info:    Executing command **account list**
-
 data:    Name        Id                                    Current  State  
-
 data:    ----------  ------------------------------------  -------  -------
-
 data:    Free Trial  8a1f4887-57d2-4efa-a4d0-b3457ad46110  true     Enabled
-
 info:    **account list** command **OK**
-
 **> azure account show 8a1f4887-57d2-4efa-a4d0-b3457ad46110**
-
 info:    Executing command **account show**
-
 data:    Name                        : Free Trial
-
 data:    ID                          : 8a1f4887-57d2-4efa-a4d0-b3457ad46110
-
 data:    State                       : Enabled
-
 data:    Tenant ID                   : 7d5503c5-af32-4c2f-bec4-a7bb3f3fa165
-
 data:    Is Default                  : true
+</code></pre>
+
 
 ### Client ID
-
 The ARM template needs Active Directory permissions to create cloud resources as an application with "contributor" privileges. This means that an application account must have been created in Active Directory in the previous step ([Creating a Service Principal](#heading=h.i25sqeulpjgs)). The password that was specified in that step will be the Client-Secret. The Client ID can be found from the Azure CLI.
 
-**> azure ad app list**
+    > azure ad app list
 
+<pre><code>
 info:    Executing command **ad app list**
-
 + Listing applications                                                         
-
 data:    AppId:                   ec864f4a-ec9d-40ce-9f40-57b58f969aee
-
 data:    ObjectId:                704ee950-90e5-4295-a501-5c7a75a3f596
-
 data:    DisplayName:             pcf
-
 data:    IdentifierUris:          0=http://BOSHAzureCPI
+</code></pre>
+
 
 ### Auto-deploy Bosh
-
 This is optional. Leave it disabled if you want to see more detail about the install process, or enable it to hurry things along a little. If you decide to enable this field, please skip the next section on Deploying Bosh.
 
 ### Deploy the ARM Template
-
 Specify the correct subscription and resource group, specify East-US as the location, accept the EULA, and then click "Create". The process should take about 15 minutes.
 
 Once the ARM template completes, the following resources will be seen in the "All Resources" panel:
@@ -416,20 +399,18 @@ There are two subnets, Bosh and CloudFoundry, and the "devbox" vm is connected t
 <img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_9.jpg">
 
 ### Connect to the devbox VM
-
 Selecting the devbox VM in the All Resources panel will show information about the VM including the Public IP that was assigned. In this case the public IP is 40.114.85.194.
 
 <img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_10.png">
 
 SSH to the devbox VM using the username and (hopefully secure) password that was created using the ARM template form.
 
-> ssh -i ~/.ssh/id_rsa jgammon@40.114.85.194
+    > ssh -i ~/.ssh/id_rsa jgammon@40.114.85.194
 
 The home directory contains several useful files.
 
-> ls
-
-bosh.key  bosh-state.json  bosh.yml  **deploy_bosh.sh**  **deploy_cloudfoundry.sh**  **example_manifests**  install.log  run.log  settings
+    > ls
+      bosh.key  bosh-state.json  bosh.yml  **deploy_bosh.sh**  **deploy_cloudfoundry.sh**  **example_manifests**  install.log  run.log  settings
 
 <table>
   <tr>
@@ -472,14 +453,13 @@ bosh.key  bosh-state.json  bosh.yml  **deploy_bosh.sh**  **deploy_cloudfoundry.s
 
 
 # Deploying Bosh
-
 It is now time to use the devbox VM as a jumpbox to deploy the Bosh Director VM. The bosh.yml file is already built by the ARM template, so everything should be ready to go.
 
 The bosh.yml file should be auto-generated correctly, but it is useful to check it before initiating the Bosh deploy. Confirm that the tenant-id, client-id, and client-secret are correct (see [Creating a Service Principal](#heading=h.i25sqeulpjgs)). The rest of the defaults should be good.
 
 To start the deployment, execute the deploy_bosh script from the devbox.
 
-> ./deploy_bosh.sh
+    > ./deploy_bosh.sh
 
 The deployment will take about 30 minutes. Once the deployment finished, there will be a Bosh Director VM as shown below.
 
@@ -487,29 +467,23 @@ The deployment will take about 30 minutes. Once the deployment finished, there w
 
 SSH from the devbox to the new Bosh Director VM to confirm everything is working.
 
-> ssh -i ./bosh.key vcap@10.0.0.4
+    > ssh -i ./bosh.key vcap@10.0.0.4
 
+<pre><code>
 The authenticity of host '10.0.0.4 (10.0.0.4)' can't be established.
-
 ECDSA key fingerprint is a5:2d:98:43:ac:70:37:48:4e:76:6b:85:c5:03:78:f4.
-
 Are you sure you want to continue connecting (yes/no)? yes
-
 Warning: Permanently added '10.0.0.4' (ECDSA) to the list of known hosts.
-
 Ubuntu 14.04.3 LTS \n \l
-
 Welcome to Ubuntu 14.04.3 LTS (GNU/Linux 3.19.0-31-generic x86_64)
-
  * Documentation:  https://help.ubuntu.com/
-
 To run a command as administrator (user "root"), use "sudo <command>".
-
 See "man sudo_root" for details.
 
 vcap@36849489-b8cd-4214-42f6-42c9296960ff:~$ sudo -i
-
 root@36849489-b8cd-4214-42f6-42c9296960ff:~#
+</code></pre>
+
 
 Here is the updated resources view after the Bosh Director is deployed. In my environment, the VM called braavos-368(..) is the new Bosh Director VM. Yours will be named according to your unique storage account name.
 
@@ -519,8 +493,9 @@ Here is the updated network diagram showing the new Bosh Director VM (braavos-36
 
 <img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_13.jpg">
 
-### Assign Bosh Director Public IP
 
+
+### Assign Bosh Director Public IP
 The IP address of the Bosh Director is 10.0.0.4. It also needs to have a public IP assigned. The public IP was created by the ARM template, but it was not assigned to the Bosh Director VM. Click "All Settings" on the VM, then “IP Addresses”, and assign the “devbox-bosh” public IP as shown below. Be sure to click the “Save” icon circled in red below.
 
 <img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_14.png">
@@ -529,61 +504,53 @@ The Bosh Director VM should now be updated with the new public IP. SSH to the pu
 
 <img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_15.png">
 
-### Connect to Bosh
 
+
+### Connect to Bosh
 The bosh CLI is already installed on the devbox. SSH to the devbox and run the following command:  (username/password is admin/admin)
 
-> bosh target 10.0.0.4
+    > bosh target 10.0.0.4
 
+<pre><code>
 Target set to `bosh'
 
 Your username: admin
-
 Enter password: 
 
 Logged in as `admin'
+</code></pre>
 
 Once the bosh target is configured, run the "bosh status" command. Make a note of the Bosh UUID.
 
-> bosh status
+  > bosh status
 
+<pre><code>
 Config
-
   /home/jgammon/.bosh_config
-
 Director
-
   Name       bosh
-
   URL        https://10.0.0.4:25555
-
   Version    1.0000.0 (00000000)
-
   User       admin
-
   UUID       768a2a54-838e-4ca5-aa34-ba58e073672a
-
   CPI        cpi
-
 ..
+</code></pre>
+
 
 # Deploying Single-VM OpenSource CloudFoundry
-
 It is possible to deploy all of CloudFoundry onto a single VM. This is useful for learning the process, but is not appropriate for a POC.
 
 ### Upload Bosh Stemcell and Release
-
 This is not required as a separate step, as the **deploy_cloudfoundry.sh** script on the devbox VM has the necessary commands included. If you need to change this for some reason, either edit the script or break the upload commands out of the script.
 
 ### Configure a Bosh CF Manifest
-
 There are CF manifests on the devbox VM already. For the purpose of this document the manifest is called **example_manifests/single-vm-cf.yml**. The CF manifest has already been auto-generated with the correct Bosh Director UUID, public IP addresses, and SSL certificates and keys. It is also generated to use the <cf-ip>.xip.io as the system domain. If you want to use a different system domain you will need to find-and-replace <cf-ip>.xip.io with your desired domain name.
 
 ### Bosh Deploy the CF Manifest
-
 Use the *bosh stemcells* and *bosh releases *CLI commands from the devbox to confirm that the stemcell and CF release have been uploaded correctly. The last step is to simply do the deploy.
 
-> ./deploy_cloudfoundry.sh  example_manifests/single-vm-cf.yml
+    > ./deploy_cloudfoundry.sh  example_manifests/single-vm-cf.yml
 
 The deployment process should take about 4 hours. Good luck!
 
@@ -593,55 +560,39 @@ Once the deployment successfully completes, you will see new Azure resources. Th
 
 You can see the SLB NAT rules from the UI or the CLI:
 
-> azure network lb show -n braavos-205c49bf-9575-4a16-b824-cc1a28162d13
+    > azure network lb show -n braavos-205c49bf-9575-4a16-b824-cc1a28162d13
 
+<pre><code>
 info:    Executing command **network lb show**
-
 ..
-
 data:    Inbound NAT Rules:
-
 data:    Name                        Provisioning state  Protocol  Frontend port  Backend port  Enable floating IP  Idle timeout in minutes
-
 data:    --------------------------  ------------------  --------  -------------  ------------  ------------------  
-
 data:    NatRule-TcpEndPoints-22     Succeeded           Tcp       22             22            false               4                      
-
 data:    NatRule-TcpEndPoints-80     Succeeded           Tcp       80             80            false               4                      
-
 data:    NatRule-TcpEndPoints-443    Succeeded           Tcp       443            443           false               4                      
-
 data:    NatRule-TcpEndPoints-2222   Succeeded           Tcp       2222           2222          false               4                      
-
 data:    NatRule-TcpEndPoints-4222   Succeeded           Tcp       4222           4222          false               4                      
-
 data:    NatRule-TcpEndPoints-4443   Succeeded           Tcp       4443           4443          false               4                      
-
 data:    NatRule-TcpEndPoints-6868   Succeeded           Tcp       6868           6868          false               4                      
-
 data:    NatRule-TcpEndPoints-25250  Succeeded           Tcp       25250          25250         false               4                      
-
 data:    NatRule-TcpEndPoints-25555  Succeeded           Tcp       25555          25555         false               4                      
-
 data:    NatRule-TcpEndPoints-25777  Succeeded           Tcp       25777          25777         false               4                      
-
 data:    NatRule-UdpEndPoints-53     Succeeded           Udp       53             53            false               4                      
-
 data:    NatRule-UdpEndPoints-68     Succeeded           Udp       68             68            false               4                      
-
 info:    **network lb show** command **OK**
+</code></pre>
 
 The topology now looks like this:
 
 <img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_17.jpg">
 
 ### Connect to CF VM
-
 You can SSH from the devbox to the CF VM using the private key:
 
-> ssh -i ./bosh vcap@10.0.16.4
+    > ssh -i ./bosh vcap@10.0.16.4
 
 Or you can CF login with username/password of admin/c1oudc0w:
 
-> cf login -a https://api.johngammon.com --skip-ssl-validation
+    > cf login -a https://api.johngammon.com --skip-ssl-validation
 
