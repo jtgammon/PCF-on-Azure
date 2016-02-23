@@ -148,74 +148,53 @@ To create and manage Azure resources on the command line, we need to install the
     > azure config mode arm
 
 3. Login
-
-Now let test if we can successfully login to azure using the CLI.
+ * Now let test if we can successfully login to azure using the CLI.
 
     > azure login
 
 **NOTE**: Enter your Microsoft account credentials when prompted
 
-### Set Default Subscription
 
-      
+
+### Set Default Subscription
 
 1. **Check whether you have multiple subscriptions**
 
-> azure account list --json
+    > azure account list --json
 
-	Sample output:
-
-	
-
-		[
-
+<pre><code>
+[
   {
-
     "id": "1b365ce1-10f7-46b6-a8af-c221fb314f92",
-
     "name": "Pay-As-You-Go",
-
     "user": {
-
       "name": "3cb98565-22e8-4ce3-94bc-4bb4086c3eb7",
-
       "type": "servicePrincipal"
-
     },
-
     "tenantId": "1fb8ec91-a6f7-4b90-b7b1-3efb5523fd34",
-
     "state": "Enabled",
-
     "isDefault": true,
-
     "registeredProviders": [],
-
     "environmentName": "AzureCloud"
-
   }
-
 ]
+</code></pre>
 
-**	**Now, get the following values from the output, there are required for the next steps:
 
-* **SUBSCRIPTION-ID** - the row id
+2. Now, get the following values from the output, there are required for the next steps:
+ * **SUBSCRIPTION-ID** - the row id
+ * **TENANT-ID** - the row tenantId
+ * If your **TENANT-ID** is not defined, one possibility is that you are using a personal account to log in to your Azure subscription. See 1.b Configure Azure CLI on how to fix this.
 
-* **TENANT-ID** - the row tenantId
+3. Set your default subscription
 
-**NOTE**: If your **TENANT-ID** is not defined, one possibility is that you are using a personal account to log in to your Azure subscription. See 1.b Configure Azure CLI on how to fix this.
-
-2. **Set your default subscription**
-
-	> azure account set <SUBSCRIPTION-ID>
+    > azure account set <SUBSCRIPTION-ID>
 
 	
 
 Example:
 
-	
-
-**>** azure account set 1b365ce1-10f7-46b6-a8af-c221fb314f92
+    > azure account set 1b365ce1-10f7-46b6-a8af-c221fb314f92
 
 Sample output:
 
