@@ -6,7 +6,7 @@ permalink: /pivotalcloudfoundryonazure.docx/
 source-id: 1gq5wbVCuZI_RQUTXBC2wlfDpbyXfa2YUS4vJ4--b8ls
 published: true
 ---
-｀![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_0.png)
+｀<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_0.png">
 
 Single VM Cloud Foundry installation on Azure
 
@@ -20,7 +20,8 @@ This document describes how to deploy BOSH, Cloud Foundry OSS and PCF on Azure
 
 # Planning and Pre-Requisites
 
-### Azure Resources
+### 
+Azure Resources
 
 Bosh and CloudFoundry will use the following resources:
 
@@ -126,11 +127,11 @@ If you already have a Microsoft Azure Account, continue to the next section; oth
 
 If this is the first time you are logging in you will not have any Azure subscription in your account. To add a new one, access the SIGN UP FOR WINDOWS AZURE link ([https://account.windowsazure.com/SignUp](https://account.windowsazure.com/SignUp)). Your personal details should appear from your account info, and you will need to verify it with an SMS or call verification: 
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_1.png)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_1.png">
 
 Once your account is verified, you can enter your credit card details. However, do not panic if you want a free trial or "pay as you go"; you won't get automatically signed up for any premium subscription. Accept the agreement and click on the Signup button; your card details will be validated and you will be taken to the subscriptions page, where you will be pleased to find that you already have a free trial !!! This is shown in the following screenshot:
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_2.png)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_2.png">
 
 If you are only interested in deploying Cloud Foundry in a single VM, the free trial subscription will be enough and you should skip the next section. On other hand if you are interested in a multi-VM deployment, a customized subscription is required. 
 
@@ -138,15 +139,15 @@ If you are only interested in deploying Cloud Foundry in a single VM, the free t
 
 Click on the "add subscription" button to add a new subscription.
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_3.png)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_3.png">
 
 Chose the **Pay-As-You-Go**  subscription (or another option that best fit your needs). After which you will get a purchase confirmation on your screen, as shown in the following screenshot:
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_4.png)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_4.png">
 
 Once the payment information is confirmed, you will be taken back to the **subscriptions** page, where you can see your new subscription being listed.
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_5.png)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_5.png">
 
 # Creating a Service Principal
 
@@ -422,9 +423,9 @@ The Azure Resource Manager (ARM) template allows you to quickly deploy the neces
 
 Click this link to deploy the template:
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_6.png)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_6.png">
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_7.png)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_7.png">
 
 ### Virtual Machine
 
@@ -500,17 +501,17 @@ Specify the correct subscription and resource group, specify East-US as the loca
 
 Once the ARM template completes, the following resources will be seen in the "All Resources" panel:
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_8.png)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_8.png">
 
 There are two subnets, Bosh and CloudFoundry, and the "devbox" vm is connected to the Bosh subnet. The VM's IP address is 10.0.0.100.
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_9.jpg)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_9.jpg">
 
 ### Connect to the devbox VM
 
 Selecting the devbox VM in the All Resources panel will show information about the VM including the Public IP that was assigned. In this case the public IP is 40.114.85.194.
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_10.png)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_10.png">
 
 SSH to the devbox VM using the username and (hopefully secure) password that was created using the ARM template form.
 
@@ -574,7 +575,7 @@ To start the deployment, execute the deploy_bosh script from the devbox.
 
 The deployment will take about 30 minutes. Once the deployment finished, there will be a Bosh Director VM as shown below.
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_11.png)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_11.png">
 
 SSH from the devbox to the new Bosh Director VM to confirm everything is working.
 
@@ -604,21 +605,21 @@ root@36849489-b8cd-4214-42f6-42c9296960ff:~#
 
 Here is the updated resources view after the Bosh Director is deployed. In my environment, the VM called braavos-368(..) is the new Bosh Director VM. Yours will be named according to your unique storage account name.
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_12.png)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_12.png">
 
 Here is the updated network diagram showing the new Bosh Director VM (braavos-368..).
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_13.jpg)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_13.jpg">
 
 ### Assign Bosh Director Public IP
 
 The IP address of the Bosh Director is 10.0.0.4. It also needs to have a public IP assigned. The public IP was created by the ARM template, but it was not assigned to the Bosh Director VM. Click "All Settings" on the VM, then “IP Addresses”, and assign the “devbox-bosh” public IP as shown below. Be sure to click the “Save” icon circled in red below.
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_14.png)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_14.png">
 
 The Bosh Director VM should now be updated with the new public IP. SSH to the public IP to confirm everything is working.
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_15.png)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_15.png">
 
 ### Connect to Bosh
 
@@ -680,7 +681,7 @@ The deployment process should take about 4 hours. Good luck!
 
 Once the deployment successfully completes, you will see new Azure resources. There is a new virtual machine called braavos-205.. (unique name according to your storage resource name). That VM is a single VM running all of the CloudFoundry services. There is also a new Load Balancer resource configured with the Public IP *cf-ip*. This SLB is not configured as a traditional load balancer, but is instead simply doing a DNAT for several incoming ports to the CloudFoundry VM.
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_16.png)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_16.png">
 
 You can see the SLB NAT rules from the UI or the CLI:
 
@@ -724,7 +725,7 @@ info:    **network lb show** command **OK**
 
 The topology now looks like this:
 
-![image alt text]({{ site.url }}/public/2rhw65Z3QsQyC3ROMCOI5A_img_17.jpg)
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_17.jpg">
 
 ### Connect to CF VM
 
