@@ -179,13 +179,10 @@ To create and manage Azure resources on the command line, we need to install the
   }
 ]
 </code></pre>
-
-
 2. Now, get the following values from the output, there are required for the next steps:
  * **SUBSCRIPTION-ID** - the row id
  * **TENANT-ID** - the row tenantId
  * If your **TENANT-ID** is not defined, one possibility is that you are using a personal account to log in to your Azure subscription. See 1.b Configure Azure CLI on how to fix this.
-
 3. Set your default subscription
 
     > azure account set <SUBSCRIPTION-ID>
@@ -195,9 +192,8 @@ To create and manage Azure resources on the command line, we need to install the
 Example:
 
     > azure account set 1b365ce1-10f7-46b6-a8af-c221fb314f92
-
-Sample output:
-
+    
+<pre><code>
 **info**:    Executing command account set
 
 **info**:    Setting subscription to "Pay-As-You-Go" with id "1b365ce1-10f7-46b6-a8af-c221fb314f92".
@@ -205,10 +201,11 @@ Sample output:
 **info**:    Changes saved
 
 **info**:    account set command **OK**
+</code></pre>
+
+
 
 ### Create an Azure Active Directory (AAD) application
-
-	
 
 	Create an AAD application with your information.
 
