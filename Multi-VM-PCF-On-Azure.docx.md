@@ -16,7 +16,7 @@ Single VM Cloud Foundry installation on Azure
 
 
 
-**Note:** The Github version of this document was generated from the [Google Doc](https://docs.google.com/a/pivotal.io/document/d/1gq5wbVCuZI_RQUTXBC2wlfDpbyXfa2YUS4vJ4--b8ls/edit?usp=sharing) version.
+**Note:** The Github version of this document was generated from the [Google Doc](https://docs.google.com/a/pivotal.io/document/d/1XiqZcd7DHOcTN7_SrfhkVLfE7dwSUkjcrlUbL63H9kE/edit?usp=sharing) version.
 
 
 # Overview
