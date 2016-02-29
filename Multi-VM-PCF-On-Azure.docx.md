@@ -508,47 +508,38 @@ The Bosh Director VM should now be updated with the new public IP. SSH to the pu
 
 <img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_16.png">
 
-### Connect to Bosh
 
+### Connect to Bosh
 The bosh CLI is already installed on the devbox. SSH to the devbox and run the following command:  (username/password is admin/admin)
 
-> bosh target 10.0.0.4
+    > bosh target 10.0.0.4
 
+<pre><code>
 Target set to `bosh'
 
-> bosh login
-
 Your username: admin
-
 Enter password: 
 
 Logged in as `admin'
+</code></pre>
 
 Once the bosh target is configured, run the "bosh status" command. Make a note of the Bosh UUID.
 
-> bosh status
+  > bosh status
 
+<pre><code>
 Config
-
   /home/jgammon/.bosh_config
-
 Director
-
   Name       bosh
-
   URL        https://10.0.0.4:25555
-
   Version    1.0000.0 (00000000)
-
   User       admin
-
   UUID       768a2a54-838e-4ca5-aa34-ba58e073672a
-
   CPI        cpi
-
 ..
+</code></pre>
 
-..
 
 # Deploy Pivotal CloudFoundry and Errands
 
