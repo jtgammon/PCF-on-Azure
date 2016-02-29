@@ -547,107 +547,69 @@ The full deployment pipeline for PCF, errands and services is available at the f
 
 <img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_17.png">
 
-### Download Binaries from PivNet
 
+### Download Binaries from PivNet
 The first step is to get the PCF binaries from PivNet. To download binaries from the command line you will need an authorization token and the URL of the binary:
 
 1. Go to PivNet at [https://network.pivotal.io](https://network.pivotal.io)
-
 2. Login with your account, click your username at the top of the page and select Edit Profile
-
 3. To obtain your authorization token, go to the bottom of the page and copy the value of API TOKEN
-
 4. Test your API token
-
-curl -i -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Token YOUR_TOKEN_GOES_HERE" -X GET [https://network.pivotal.io/api/v2/authentication](https://network.pivotal.io/api/v2/authentication)
-
+  * curl -i -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Token YOUR_TOKEN_GOES_HERE" -X GET [https://network.pivotal.io/api/v2/authentication](https://network.pivotal.io/api/v2/authentication)
 5. Go back to PivNet home page
-
 6. Accept the EULA for cf 1.6.15 release:
-
-curl -i -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Token YOUR_TOKEN_GOES_HERE" -X POST 
-
-[https://network.pivotal.io/api/v2/products/elastic-runtime/releases/1485/eula_acceptance](https://network.pivotal.io/api/v2/products/elastic-runtime/releases/1485/eula_acceptance)
-
+  * curl -i -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Token YOUR_TOKEN_GOES_HERE" -X POST [https://network.pivotal.io/api/v2/products/elastic-runtime/releases/1485/eula_acceptance](https://network.pivotal.io/api/v2/products/elastic-runtime/releases/1485/eula_acceptance)
 7. To obtain the URL of the binary, choose the product, **_cf 1.6.15_***,* select the file you want to download, click the i button and copy the API Download URL
-
-***note - ensure the quotation marks are all consistent in the copied string - test in simple text editor**
-
+  * Note: ensure the quotation marks are all consistent in the copied string - test in simple text editor**
 8. Use wget to get the product. Download the following binaries from Pivnet:
+  * Elastic Runtime 1.6.15
+  * wget -O "cf-1.6.15.pivotal" --post-data="" --header="Authorization: Token YOUR_TOKEN_GOES_HERE" https://network.pivotal.io/api/v2/products/elastic-runtime/releases/1485/product_files/3888/download
 
-    1. Elastic Runtime 1.6.15
-
-wget -O "cf-1.6.15.pivotal" --post-data="" --header="Authorization: Token YOUR_TOKEN_GOES_HERE" https://network.pivotal.io/api/v2/products/elastic-runtime/releases/1485/product_files/3888/download
-
-		
 
 ### Upload the Releases to Bosh
-
 Next we need to unzip and upload the releases we downloaded from PivNet. Unzip the each of the .pivotal files downloaded i.e. cf-1.6.15.pivotal. 
 
 Each .pivotal file unzipped has a /release folder. Change dir to each /release folder for each .pivotal unzipped. Use BOSH to upload the .tgz files.
 
+<pre><code>
 unzip cf-1.6.15.pivotal
-
 bosh upload release releases/cf-225.12.tgz
-
 bosh upload release releases/cf-autoscaling-28.tgz
-
 bosh upload release releases/cf-mysql-23.tgz
-
 bosh upload release releases/diego-0.1446.1.tgz
-
 bosh upload release releases/etcd-release-18.tgz
-
 bosh upload release releases/garden-linux-0.330.0.tgz
-
 bosh upload release releases/push-apps-manager-release-397.tgz
-
 bosh upload release releases/notifications-19.tgz
-
 bosh upload release releases/notifications-ui-10.tgz
+</code></pre>
 
 ### Configure a PCF Manifest
-
 Now we need to create the deployment manifest for Azure. Fortunately we have a handy tool at our disposal to do so.  The converter-azure, which is a Ruby tool, will take as input the vSphere manifest and automatically convert it (given some parameters) to a format that BOSH and the Azure CPI can understand.
 
 Please follow the steps below to get the Azure manifest:
 
 1. Clone the converter-azure tool from git
-
-> cd ~
-
-> git clone [https://github.com/pivotal-customer0/converter-azure.git](https://github.com/pivotal-customer0/converter-azure.git)
-
-> cf converter-azure
-
-> bundle install
-
->
-
-NOTE: If you encounter an error similar to the following, 
-
-"Bundler could not find compatible versions for gem "bundler"
-
-Just reinstall the Ruby gem manager by running the following command (assuming you are on a Linux based platform):
-
-> gem install bundler
-
+  * cd ~
+  * git clone [https://github.com/pivotal-customer0/converter-azure.git](https://github.com/pivotal-customer0/converter-azure.git)
+  * cf converter-azure
+  * bundle install
+  * NOTE: If you encounter an error similar to the following: "Bundler could not find compatible versions for gem "bundler", Just reinstall the Ruby gem manager by running the following command (assuming you are on a Linux based platform):
+  * gem install bundler
 2. Use the converter
+  * bundle exec converter --name cf \
+  *            --swap-ip-ranges IP-RANGE-TO-SWAP \
+  *            --domain YOUR-DOMAIN \
+  *            --sanitize-partition \
+  *            --director-uuid YOUR-BOSH-DIRECTOR-UUID \
+  *            --manifest VSPHERE-MANIFEST-FILE \
+  *            --dns DNS-IP \
+  *            --stemcell_version STEMCELL-VERSION \
+  *            --network-name BOSH-SUBNET:CLOUDFOUNDRY-SUBNET \
+  *            --output WHERE-TO-PUT-THE-CONVERTED-MANIFEST \
+  *            --public_ip INSTALLATION-PUBLIC-IP
 
-	> bundle exec converter --name cf \
-                      --swap-ip-ranges IP-RANGE-TO-SWAP \
-                      --domain YOUR-DOMAIN \
-                      --sanitize-partition \
-                      --director-uuid YOUR-BOSH-DIRECTOR-UUID \
-                      --manifest VSPHERE-MANIFEST-FILE \
-                      --dns DNS-IP \
-                      --stemcell_version STEMCELL-VERSION \
-                      --network-name BOSH-SUBNET:CLOUDFOUNDRY-SUBNET \
-                      --output WHERE-TO-PUT-THE-CONVERTED-MANIFEST \
-                      --public_ip INSTALLATION-PUBLIC-IP
-
-Replace the values of the parameters as follow 
+Replace the values of the parameters as follows: 
 
 <table>
   <tr>
@@ -703,6 +665,7 @@ Replace the values of the parameters as follow
 
 Example of usage:
 
+<pre><code>
 > bundle exec converter --name cf \
                       --swap-ip-ranges 192.168.200:10.0.16 \
                       --domain azure.pcflab.net \
@@ -714,122 +677,88 @@ Example of usage:
                       --network-name boshvnet:cfsubnet \
                       --output ../azure/cf.yml \
                       --public_ip 40.76.198.83
-
+</code></pre>
  
 
 3. Generate tile manifest
-
 If you are planning to install some of our services (MySQL, SCS, etc.) , the converter can also be leverage. All you have to do is repeat the step b. using the product manifest file generated by vSphere. Be sure to change the source file name each time! Be sure to change the destination file each time!
 
-Samples of converted YMLs for Azure deployment
-
+Samples of converted YMLs for Azure deployment:
 * [PCF](https://github.com/pivotal-customer0/azure-bosh-cpi-pipeline/blob/master/cf.yml)
-
 * [MySQL](https://github.com/pivotal-customer0/azure-bosh-cpi-pipeline/blob/master/mysql.yml)
-
 * [RabbitMQ](https://github.com/pivotal-customer0/azure-bosh-cpi-pipeline/blob/master/rabbitmq.yml)
-
 * [Redis](https://github.com/pivotal-customer0/azure-bosh-cpi-pipeline/blob/master/redis.yml)
-
 * [Spring Cloud Services](https://github.com/pivotal-customer0/azure-bosh-cpi-pipeline/blob/master/spring-cloud.yml)
 
 **NOTE**: At the moment, the tool does not generate certificate for you, you will have to  take care of that part yourself. 
 
-### Deploy PCF and Errands
 
+### Deploy PCF and Errands
 Use the *bosh stemcells* and *bosh releases *CLI commands from the devbox to confirm that the stemcells and CF releases have been uploaded correctly. The last step is to simply do the deploy.
 
+<pre><code>
 > bosh target <bosh-director-ip>
-
 > bosh deployment YOUR-MANIFEST-FOR-PIVOTAL-CLOUD-FOUNDRY
-
 > bosh deploy
+</code></pre>
 
 The deployment process should take about 2-4 hours. Good luck! Once CloudFoundry finishes deploying, you can run the errands.
 
+<pre><code>
 > bosh -n run errand smoke-tests
-
 > bosh -n run errand autoscaling
-
 > bosh -n run errand autoscaling-register-broker
-
 > bosh -n run errand notifications
-
 > bosh -n run errand notifications-ui
-
 > bosh -n run errand push-apps-manager
-
 > bosh -n run errand push-app-usage-service
+</code></pre>
 
 ### Connect to PCF
-
 You can CF login with username/password of admin/password:
 
-> cf login -a https://api.SYSTEM-DOMAIN --skip-ssl-validation
+  > cf login -a https://api.SYSTEM-DOMAIN --skip-ssl-validation
 
 # Deploy MySQL
-
 Similar to deploying PCF above, we need to **modify the manifest**,** **upload our releases, run the deployment and associated errands. For more information about getting the authorization token, see the previous section about deploying Pivotal CloudFoundry.
 
-curl -i -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Token YOUR_TOKEN_GOES_HERE" -X POST [https://network.pivotal.io/api/v2/products/p-mysql/releases/1327/eula_acceptance](https://network.pivotal.io/api/v2/products/p-mysql/releases/1327/eula_acceptance)
+<pre><code>
+  > curl -i -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Token YOUR_TOKEN_GOES_HERE" -X POST [https://network.pivotal.io/api/v2/products/p-mysql/releases/1327/eula_acceptance](https://network.pivotal.io/api/v2/products/p-mysql/releases/1327/eula_acceptance)
+  > wget -O "p-mysql-1.7.2.pivotal"  --post-data="" --header="Authorization: Token YOUR_TOKEN_GOES_HERE" [https://network.pivotal.io/api/v2/products/p-mysql/releases/1327/product_files/3630/download](https://network.pivotal.io/api/v2/products/p-mysql/releases/1327/product_files/3630/download)
 
-wget -O "p-mysql-1.7.2.pivotal"  --post-data="" --header="Authorization: Token YOUR_TOKEN_GOES_HERE" [https://network.pivotal.io/api/v2/products/p-mysql/releases/1327/product_files/3630/download](https://network.pivotal.io/api/v2/products/p-mysql/releases/1327/product_files/3630/download)
-
-> unzip p-mysql-1.7.2.pivotal
-
-> bosh target <bosh-director-ip>
-
-> bosh upload release releases/cf-mysql-24.tgz
-
-> bosh upload release releases/mysql-backup-1.tgz
-
-> bosh upload release releases/service-backup-1.tgz
-
-> bosh deployment p-mysql-1.7.2.yml
-
-> bosh deploy
-
-> bosh run errand broker-registrar
-
-> bosh -n deployment mysql.yml
-
-> bosh -n deploy
-
-> bosh -n run errand broker-registrar
-
-> bosh -n run errand acceptance-tests
+  > unzip p-mysql-1.7.2.pivotal
+  > bosh target <bosh-director-ip>
+  > bosh upload release releases/cf-mysql-24.tgz
+  > bosh upload release releases/mysql-backup-1.tgz
+  > bosh upload release releases/service-backup-1.tgz
+  > bosh deployment p-mysql-1.7.2.yml
+  > bosh deploy
+  > bosh run errand broker-registrar
+  > bosh -n deployment mysql.yml
+  > bosh -n deploy
+  > bosh -n run errand broker-registrar
+  > bosh -n run errand acceptance-tests
+</code></pre>
 
 # Deploy Redis
-
+<pre><code>
 > bosh target <bosh-director-ip>
-
 > bosh -n deployment redis.yml
-
 > bosh -n deploy
-
 > bosh -n run errand broker-registrar
-
 > bosh -n run errand smoke-tests
+</code></pre>
 
 # Deploy RabbitMQ
-
+<pre><code>
 > bosh target <bosh-director-ip>
-
 > bosh -n deployment rabbitmq.yml
-
 > bosh -n deploy
-
 > bosh -n run errand broker-registrar
-
 # Deploy Spring Cloud Services
-
 > bosh target <bosh-director-ip>
-
 > bosh -n deployment spring-cloud.yml
-
 > bosh -n deploy
-
 > bosh -n run errand deploy-service-broker
-
 > bosh -n run errand register-service-broker
-
+</code></pre>
