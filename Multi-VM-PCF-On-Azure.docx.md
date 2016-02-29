@@ -130,6 +130,7 @@ Once the payment information is confirmed, you will be taken back to the **subsc
 
 <img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_5.png">
 
+
 # Creating a Service Principal
 
 Azure CPI provisions resources in Azure using the Azure Resource Manager (ARM) APIs. We use a Service Principal account to give Azure CPI the access to proper resources. This can be done using either the portal or the CLI, however as part of this exercise, we will be using the Azure CLI. Skip the next section if you already have the CLI installed.
@@ -138,271 +139,193 @@ Azure CPI provisions resources in Azure using the Azure Resource Manager (ARM) A
 
 To create and manage Azure resources on the command line, we need to install the Azure CLI.
 
-1. Install and configure Azure CLI using the documentation that can be found **[HER**E](https://azure.microsoft.com/en-us/documentation/articles/xplat-cli-install/)
-
-**NOTE: **
-
-* It is suggested to run Azure CLI using Ubuntu Server 14.04 LTS or Windows 10.
-
-* If you are using Windows, it is suggested that you use **command line** but not PowerShell to run Azure CLI
-
+1. Install and configure Azure CLI using the documentation that can be found [HERE](https://azure.microsoft.com/en-us/documentation/articles/xplat-cli-install/)
+ * It is suggested to run Azure CLI using Ubuntu Server 14.04 LTS or Windows 10.
+ * If you are using Windows, it is suggested that you use **command line** but not PowerShell to run Azure CLI
 2. Configure Azure CLI
+ * Because the Azure Resource Manager mode is not enabled by default, use the following command to enable Azure CLI Resource Manager commands.
 
-Because the Azure Resource Manager mode is not enabled by default, use the following command to enable Azure CLI Resource Manager commands.
-
-> azure config mode arm
+    > azure config mode arm
 
 3. Login
+ * Now let test if we can successfully login to azure using the CLI.
 
-Now let test if we can successfully login to azure using the CLI.
+    > azure login
 
-> azure login
+**NOTE**: Enter your Microsoft account credentials when prompted
 
-info:    Executing command **login**
 
-info:    To sign in, use a web browser to open the page https://aka.ms/devicelogin. Enter the code FR6MB95F8 to authenticate.
 
-Use a browser to go to the website indicated, enter the code, and then enter your Microsoft account credentials when prompted. Once the credentials are verified the CLI will successfully login.
+### Set Default Subscription
 
-<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_6.png">
+* Check whether you have multiple subscriptions
 
-Set Default Subscription
+    > azure account list --json
 
-      
-
-1. **Check whether you have multiple subscriptions**
-
-> azure account list --json
-
-	Sample output:
-
-	
-
-		[
-
+<pre><code>
+[
   {
-
     "id": "1b365ce1-10f7-46b6-a8af-c221fb314f92",
-
     "name": "Pay-As-You-Go",
-
     "user": {
-
       "name": "3cb98565-22e8-4ce3-94bc-4bb4086c3eb7",
-
       "type": "servicePrincipal"
-
     },
-
     "tenantId": "1fb8ec91-a6f7-4b90-b7b1-3efb5523fd34",
-
     "state": "Enabled",
-
     "isDefault": true,
-
     "registeredProviders": [],
-
     "environmentName": "AzureCloud"
-
   }
-
 ]
+</code></pre>
+* Now, get the following values from the output, there are required for the next steps:
+ * **SUBSCRIPTION-ID** - the row id
+ * **TENANT-ID** - the row tenantId
+ * If your **TENANT-ID** is not defined, one possibility is that you are using a personal account to log in to your Azure subscription. See 1.b Configure Azure CLI on how to fix this.
+* Set your default subscription
 
-**	**Now, get the following values from the output, there are required for the next steps:
-
-* **SUBSCRIPTION-ID** - the row id
-
-* **TENANT-ID** - the row tenantId
-
-**NOTE**: If your **TENANT-ID** is not defined, one possibility is that you are using a personal account to log in to your Azure subscription. See 1.b Configure Azure CLI on how to fix this.
-
-2. **Set your default subscription**
-
-	> azure account set <SUBSCRIPTION-ID>
+    > azure account set <SUBSCRIPTION-ID>
 
 	
 
 Example:
 
-	
-
-**>** azure account set 1b365ce1-10f7-46b6-a8af-c221fb314f92
-
-Sample output:
-
+    > azure account set 1b365ce1-10f7-46b6-a8af-c221fb314f92
+    
+<pre><code>
 **info**:    Executing command account set
-
 **info**:    Setting subscription to "Pay-As-You-Go" with id "1b365ce1-10f7-46b6-a8af-c221fb314f92".
-
 **info**:    Changes saved
-
 **info**:    account set command **OK**
+</code></pre>
+
+
 
 ### Create an Azure Active Directory (AAD) application
 
-	
+Create an AAD application with your information.
 
-	Create an AAD application with your information.
-
-**>** azure ad app create --name <name> --password <password> --home-page <home-page> --identifier-uris <identifier-uris>
+    > azure ad app create --name <name> --password <password> --home-page <home-page> --identifier-uris <identifier-uris>
 
 Explanation:
 
 * **name**: The display name for the application
-
 * **password**: The value for the password credential associated with the application that will be valid for one year by default. This is your CLIENT-SECRET.
-
 * **home-page**: The URL to the application homepage. You can use a faked URL here.
-
 * **Identifier-uris:** The comma-delimited URIs that identify the application. You can use a faked URL here.
 
 	Example: 
 
-> azure ad app create --name "Service Principal for BOSH" --password "password" --home-page "http://BOSHAzureCPI" --identifier-uris "http://BOSHAzureCPI"
+    > azure ad app create --name "Service Principal for BOSH" --password "password" --home-page "http://BOSHAzureCPI" --identifier-uris "http://BOSHAzureCPI"
 
-	Sample Output:
-
+<pre><code>
 info:    Executing command ad app create
-
 + Creating application Service Principal for SYO                               
-
-data:    **AppId**:                   0417e000-3506-4d6b-84a6-e5d97bbdd79f
-
+data:    **AppId**:               0417e000-3506-4d6b-84a6-e5d97bbdd79f
 data:    ObjectId:                6f861a3c-8e7c-4097-a925-54c179d811a5
-
 data:    DisplayName:             Service Principal for SYO
-
 data:    IdentifierUris:          0=http://BOSHAzureCPI
-
 data:    ReplyUrls:              
-
 data:    AvailableToOtherTenants:  False
-
 data:    AppPermissions:       
-
 data:                             claimValue:  user_impersonation
-
 data:                             description:  Allow the application to access Service Principal for SYO on behalf of the signed-in user.
-
 data:                             directAccessGrantTypes: 
-
 data:                             displayName:  Access Service Principal for SYO
-
 data:                             impersonationAccessGrantTypes:  impersonated=User, impersonator=Application
-
 data:                             isDisabled: 
-
 data:                             origin:  Application
-
 data:                             permissionId:  57febf3d-369f-4c66-9a7a-2cd4ef131ebe
-
 data:                             resourceScopeType:  Personal
-
 data:                             userConsentDescription:  Allow the application to access Service Principal for SYO on your behalf.
-
 data:                             userConsentDisplayName:  Access Service Principal for SYO
-
 data:                             lang: 
-
 info:    ad app create command OK
+</code></pre>
 
-	**NOTE**: **AppId** is your CLIENT-ID you need to create the service principal.
+
 
 ### Create a Service Principal
 
-> azure ad sp create <CLIENT-ID>
+    > azure ad sp create <CLIENT-ID>
 
 Example: 
 
-	> azure ad sp create 0417e000-3506-4d6b-84a6-e5d97bbdd79f
+    > azure ad sp create 0417e000-3506-4d6b-84a6-e5d97bbdd79f
 
-Sample Output:
-
+<pre><code>
 info:    Executing command ad sp create
-
 + Creating service principal for application 0417e000-3506-4d6b-84a6-e5d97bbdd79f
-
 data:    Object Id:               8df3fc23-8549-4ab8-8b3e-5bdb9ac029c3
-
 data:    Display Name:            Service Principal for BOSH
-
 data:    Service Principal Names:
-
 data:                             3cb98565-22e8-4ce3-94bc-4bb4086c3eb7
-
 data:                             http
-
 Info:     ad sp create command OK
+</code></pre>
 
 You can get **service-principal-name** from any value of **Service Principal Names** to assign role to your service principal.
+
+
 
 ### Assign roles to your Service Principal
 
 Now you have a service principal account, you need to grant this account access to proper resource use Azure CLI.
 
-> azure role assignment create --spn <service-principal-name> --roleName "Contributor" --subscription <subscription-id>
+    > azure role assignment create --spn <service-principal-name> --roleName "Contributor" --subscription <subscription-id>
 
 Example:
 
-> azure role assignment create --spn "http://BOSHAzureCPI" --roleName "Contributor" --subscription 1b365ce1-10f7-46b6-a8af-c221fb314f92  
+    > azure role assignment create --spn "http://BOSHAzureCPI" --roleName "Contributor" --subscription 1b365ce1-10f7-46b6-a8af-c221fb314f92  
 
 Then you can verify the assignment with the following command:
 
-> azure role assignment list --spn http://BOSHAzureCPI 
+    > azure role assignment list --spn http://BOSHAzureCPI 
 
-Sample Output:
-
+<pre><code>
 info:    Executing command role assignment list
-
 + Searching for role assignments                                               
-
 data:    RoleAssignmentId     : /subscriptions/1b365ce1-10f7-46b6-a8af-c221fb314f92/providers/Microsoft.Authorization/roleAssignments/b88043e3-5e7c-4bb7-aa2b-c87f629ae315
-
 data:    RoleDefinitionName   : Contributor
-
 data:    RoleDefinitionId     : b24988ac-6180-42a0-ab88-20f7382dd24c
-
 data:    Scope                : /subscriptions/1b365ce1-10f7-46b6-a8af-c221fb314f92
-
 data:    Display Name         : Service Principal for BOSH
-
 data:    SignInName           :
-
 data:    ObjectId             : 8df3fc23-8549-4ab8-8b3e-5bdb9ac029c3
-
 data:    ObjectType           : ServicePrincipal
-
 data:    
-
 info:    role assignment list command OK
+</code></pre>
+
 
 ### Verify your Service Principal
 
 Your service principal is created as follows:
 
 * **TENANT-ID**
-
 * **CLIENT-ID**
-
 * **CLIENT-SECRET**
 
 Please verify it with the following steps:
 
-1. Use Azure CLI to login with your service principal.
+* Use Azure CLI to login with your service principal.
+ * You can find the TENANT-ID, CLIENT-ID, and CLIENT-SECRET properties in the ~/bosh.yml file. If you cannot login, then the service principal is invalid.
 
-You can find the TENANT-ID, CLIENT-ID, and CLIENT-SECRET properties in the ~/bosh.yml file. If you cannot login, then the service principal is invalid.
-
-azure login --username <CLIENT-ID> --password <CLIENT-SECRET> --service-principal --tenant <TENANT-ID>
+  > azure login --username <CLIENT-ID> --password <CLIENT-SECRET> --service-principal --tenant <TENANT-ID>
 
 Example:
 
-azure login --username 246e4af7-75b5-494a-89b5-363addb9f0fa --password "password" --service-principal --tenant 22222222-1234-5678-1234-678912345678
+    > azure login --username 246e4af7-75b5-494a-89b5-363addb9f0fa --password "password" --service-principal --tenant 22222222-1234-5678-1234-678912345678
 
-2. Verify that the subscription which the service principal belongs to is the same subscription that is used to create your resource group. (This may happen when you have multiple subscriptions.)
+* Verify that the subscription which the service principal belongs to is the same subscription that is used to create your resource group. (This may happen when you have multiple subscriptions.)
 
-3. Recreate a service principal on your tenant if the service principal is invalid.
+* Recreate a service principal on your tenant if the service principal is invalid.
+ *In some cases, if the service principal is invalid, then the deployment of BOSH will fail. Errors in ~/run.log will show get_token - http error like this [reported issue](https://github.com/cloudfoundry-incubator/bosh-azure-cpi-release/issues/49).
 
-**NOTE**: In some cases, if the service principal is invalid, then the deployment of BOSH will fail. Errors in ~/run.log will show get_token - http error like this [reported issue](https://github.com/cloudfoundry-incubator/bosh-azure-cpi-release/issues/49).
+
+
+
 
 # Deploying the ARM Template
 
