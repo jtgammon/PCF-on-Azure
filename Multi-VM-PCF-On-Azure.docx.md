@@ -6,8 +6,9 @@ permalink: /multi-vm-pcf-on-azure.docx/
 source-id: 1XiqZcd7DHOcTN7_SrfhkVLfE7dwSUkjcrlUbL63H9kE
 published: true
 ---
+
 <p align="center">
-｀<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_0.png">
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_0.png">
 <br>
 Single VM Cloud Foundry installation on Azure
 <br>
@@ -132,11 +133,11 @@ If you already have a Microsoft Azure Account, continue to the next section; oth
 
 If this is the first time you are logging in you will not have any Azure subscription in your account. To add a new one, access the SIGN UP FOR WINDOWS AZURE link ([https://account.windowsazure.com/SignUp](https://account.windowsazure.com/SignUp)). Your personal details should appear from your account info, and you will need to verify it with an SMS or call verification: 
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_1.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_1.png">
 
 Once your account is verified, you can enter your credit card details. However, do not panic if you want a free trial or "pay as you go"; you won't get automatically signed up for any premium subscription. Accept the agreement and click on the Signup button; your card details will be validated and you will be taken to the subscriptions page, where you will be pleased to find that you already have a free trial !!! This is shown in the following screenshot:
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_2.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_2.png">
 
 If you are only interested in deploying Cloud Foundry in a single VM, the free trial subscription will be enough and you should skip the next section. On other hand if you are interested in a multi-VM deployment, a customized subscription is required. 
 
@@ -144,15 +145,15 @@ If you are only interested in deploying Cloud Foundry in a single VM, the free t
 
 Click on the "add subscription" button to add a new subscription.
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_3.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_3.png">
 
 Chose the **Pay-As-You-Go**  subscription (or another option that best fit your needs). After which you will get a purchase confirmation on your screen, as shown in the following screenshot:
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_4.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_4.png">
 
 Once the payment information is confirmed, you will be taken back to the **subscriptions** page, where you can see your new subscription being listed.
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_5.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_5.png">
 
 # Creating a Service Principal
 
@@ -188,7 +189,7 @@ info:    To sign in, use a web browser to open the page https://aka.ms/devicelog
 
 Use a browser to go to the website indicated, enter the code, and then enter your Microsoft account credentials when prompted. Once the credentials are verified the CLI will successfully login.
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_6.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_6.png">
 
 Set Default Subscription
 
@@ -434,9 +435,9 @@ The Azure Resource Manager (ARM) template allows you to quickly deploy the neces
 
 Click this link to deploy the template:
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_7.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_7.png">
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_8.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_8.png">
 
 ### Virtual Machine Name
 
@@ -512,17 +513,17 @@ After filling out the information in the previous section, specify the correct s
 
 Once the ARM template completes, the following resources will be seen in the "All Resources" panel:
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_9.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_9.png">
 
 There are two subnets, Bosh and CloudFoundry, and the "devbox" vm is connected to the Bosh subnet. The VM's IP address is 10.0.0.100.
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_10.jpg)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_10.jpg">
 
 ### Connect to the devbox VM
 
 Selecting the devbox VM in the All Resources panel will show information about the VM including the Public IP that was assigned. In this case the public IP is 40.114.85.194.
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_11.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_11.png">
 
 SSH to the devbox VM using the username and your private SSH key.
 
@@ -586,7 +587,7 @@ To start the deployment, execute the deploy_bosh script from the devbox.
 
 The deployment will take about 40 minutes. Once the deployment finished, there will be a Bosh Director VM as shown below.
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_12.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_12.png">
 
 SSH from the devbox to the new Bosh Director VM to confirm everything is working.
 
@@ -616,21 +617,21 @@ root@36849489-b8cd-4214-42f6-42c9296960ff:~#
 
 Here is the updated resources view after the Bosh Director is deployed. In my environment, the VM called braavos-368(..) is the new Bosh Director VM. Yours will be named according to your unique storage account name.
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_13.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_13.png">
 
 Here is the updated network diagram showing the new Bosh Director VM (braavos-368..).
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_14.jpg)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_14.jpg">
 
 ### Assign Bosh Director Public IP
 
 The IP address of the Bosh Director is 10.0.0.4. It can optionally have a public IP assigned. The public IP was created by the ARM template, but it was not assigned to the Bosh Director VM. Click "All Settings" on the VM, then “IP Addresses”, and assign the “devbox-bosh” public IP as shown below. Be sure to click the “Save” icon circled in red below.
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_15.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_15.png">
 
 The Bosh Director VM should now be updated with the new public IP. SSH to the public IP to confirm everything is working.
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_16.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_16.png">
 
 ### Connect to Bosh
 
@@ -678,7 +679,7 @@ Director
 
 The full deployment pipeline for PCF, errands and services is available at the following Github repsoitory: [https://github.com/pivotal-customer0/azure-bosh-cpi-pipeline](https://github.com/pivotal-customer0/azure-bosh-cpi-pipeline). The repository contains the manifests used in the pipeline as well as the Concourse manifest and scripts.
 
-![image alt text]({{ site.url }}/public/xUtrEM6WO3aobUMV8wT0hw_img_17.png)
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_17.png">
 
 ### Download Binaries from PivNet
 
