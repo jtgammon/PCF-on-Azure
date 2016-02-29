@@ -26,25 +26,17 @@ This document describes how to deploy BOSH, Cloud Foundry OSS and PCF on Azure
 
 # Planning and Pre-Requisites
 
-### 
-Azure Resources
+### Azure Resources
 
 Bosh and CloudFoundry will use the following resources:
 
-*  Azure Resource Manager Resource Groups, Virtual Networks, Subnets
-
+* Azure Resource Manager Resource Groups, Virtual Networks, Subnets
 * Azure DNS (wildcard CNAME and/or A records)
-
 * AD Client ID and Application Service Principal
-
 * Storage Account(s) – containers for block, tables
-
 * Virtual Machines
-
 * Load Balancer & Availability Sets
-
 * (mult-VM only) 100+ Core & VM Quota (Standard Dv2 Instances)
-
 * Azure Resource Manager ExpressRoutes and/or Site-to-Site VPN
 
 ### Azure Security Object Creation
@@ -52,7 +44,6 @@ Bosh and CloudFoundry will use the following resources:
 The following security objects will be created as part of the Cloud Foundry installation (these are automated through an Azure Resource Manager template, or can be done manually via the Azure CLI or Azure Portal):
 
 *  Client ID
-
 * Application Service Principal
 
 These objects are used by BOSH, Pivotal's integrated installation & provisioning system, to perform its VM and storage lifecycle management duties automatically.
@@ -78,54 +69,38 @@ For a production deployment, Pivotal recommends the Azure Load Balancer pools to
 * Cloud Foundry requires an Azure Resource Manager **Subscription**,
 
 * A typical **multi-VM** Pivotal Cloud Foundry install requires upwards of 25 VMs or more.
-
 * **This requires Increased Azure quotas**, preferably within a **region** with premium storage (e.g East US 2), with the following quotas as safe for a small installation:
-
-    * Total Regional Cores      	100
-
-    * Standard-A Family Cores	50
-
-    * Standard-D Family Cores	50
+    * Total Regional Cores:  100
+    * Standard-A Family Cores:	50
+    * Standard-D Family Cores:	50
 
 * Via ARM template or Azure CLI / Portal**, an Azure Resource Group**, including:
-
     * **Virtual Network** and **Subnet**
-
     * **One or more storage accounts** (subject to I/O performance requirements); one is sufficient for dev performance
-
     * Within the storage account,
-
         * **Two storage account containers (bosh **and** stemcell)**
-
         *  **One storage account table** (**stemcells**)
-
     * A **Static IP address** &** load balancer** for accessing Cloud Foundry applications and the API
 
 ### Pivotal Cloud Foundry Installation Process
 
 1. *Pivotal is happy to walk any individuals through the installation process in person or over WebEx*
-
 2. Pivotal Cloud Foundry (PCF) **_cannot be manually installed_**, it must be installed **automatically** through **BOSH**, an integrated VM/storage provisioning, configuration, packaging, and health management system for composite software releases. ([http://bosh.io](http://bosh.io))
-
 3. **Pivotal Cloud Foundry Operations Manager** provides a Web GUI for managing BOSH and Cloud Foundry.  Operations Manager is projected to be available for the Azure platform in mid-2016.  Until then, **_the command-line BOSH tools_** must be used to install and maintain PCF on Azure.
-
 4. A small BOSH Client VM (vanilla Ubuntu Linux) is created initially via **ARM template** or **manually** to install and administer BOSH and CF
-
 5. A BOSH Director VM, image provided by Pivotal, is then provisioned via **command-line** to manage the cluster. 
-
 6. **_The BOSH command line and BOSH Director VM then provisions and manages all Cloud Foundry VMs, Disks, and IPs via the Azure API. _**
-
 7. Approximately 20 VMs or more, along with 40 to 60 Virtual Hard Drives, varying on performance, availability, & service requirements, are created to host Cloud Foundry.  The size of VMs vary depending on performance, but the majority will be Standard D1 or D2.
 
 ### Azure Network Requirements
 
 1. Cloud Foundry is installed on an **Azure Resource Group**, which is the equivalent of a **virtual private cloud** with **private subnet**.  This subnet is customizable to any private IP range desired.
-
 2. If this Cloud Foundry instance requires access to internal data center servers, this requires an **Azure Resource Manager ExpressRoute** or **Site-to-Site** **VPN**.
-
 3. Pivotal has an example reference architecture and implementation for an **OpenVPN** based setup to enable cross data-center connectivity to Azure in the interim; alternatively, an **Azure Resource Manager Site-to-Site VPN** is possible if preferred.
+4. The long run solution would be to provision and configure a **Azure Resource Manager ExpressRoute.**
 
-4. The long run solution would be to provision and configure an **Azure Resource Manager ExpressRoute.**
+
+
 
 # Creating a Microsoft Azure Account
 
