@@ -407,15 +407,15 @@ Selecting the devbox VM in the All Resources panel will show information about t
 
 <img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_11.png">
 
-SSH to the devbox VM using the username and your private SSH key.
 
-> ssh -i ~/.ssh/id_rsa jgammon@40.114.85.194
+SSH to the devbox VM using the username and (hopefully secure) password that was created using the ARM template form.
+
+    > ssh -i ~/.ssh/id_rsa jgammon@40.114.85.194
 
 The home directory contains several useful files.
 
-> ls
-
-bosh.key  bosh-state.json  bosh.yml  **deploy_bosh.sh**  **deploy_cloudfoundry.sh**  **example_manifests**  install.log  run.log  settings
+    > ls
+      bosh.key  bosh-state.json  bosh.yml  **deploy_bosh.sh**  **deploy_cloudfoundry.sh**  **example_manifests**  install.log  run.log  settings
 
 <table>
   <tr>
@@ -458,44 +458,37 @@ bosh.key  bosh-state.json  bosh.yml  **deploy_bosh.sh**  **deploy_cloudfoundry.s
 
 
 # Deploying Bosh
-
 It is now time to use the devbox VM as a jumpbox to deploy the Bosh Director VM. The bosh.yml file is already built by the ARM template, so everything should be ready to go.
 
 The bosh.yml file should be auto-generated correctly, but it is useful to check it before initiating the Bosh deploy. Confirm that the tenant-id, client-id, and client-secret are correct (see [Creating a Service Principal](#heading=h.i25sqeulpjgs)). The rest of the defaults should be good.
 
 To start the deployment, execute the deploy_bosh script from the devbox.
 
-> ./deploy_bosh.sh
+    > ./deploy_bosh.sh
 
-The deployment will take about 40 minutes. Once the deployment finished, there will be a Bosh Director VM as shown below.
+The deployment will take about 30 minutes. Once the deployment finished, there will be a Bosh Director VM as shown below.
 
-<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_12.png">
+<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_11.png">
 
 SSH from the devbox to the new Bosh Director VM to confirm everything is working.
 
-> ssh -i ./bosh.key vcap@10.0.0.4
+    > ssh -i ./bosh.key vcap@10.0.0.4
 
+<pre><code>
 The authenticity of host '10.0.0.4 (10.0.0.4)' can't be established.
-
 ECDSA key fingerprint is a5:2d:98:43:ac:70:37:48:4e:76:6b:85:c5:03:78:f4.
-
 Are you sure you want to continue connecting (yes/no)? yes
-
 Warning: Permanently added '10.0.0.4' (ECDSA) to the list of known hosts.
-
 Ubuntu 14.04.3 LTS \n \l
-
 Welcome to Ubuntu 14.04.3 LTS (GNU/Linux 3.19.0-31-generic x86_64)
-
  * Documentation:  https://help.ubuntu.com/
-
 To run a command as administrator (user "root"), use "sudo <command>".
-
 See "man sudo_root" for details.
 
 vcap@36849489-b8cd-4214-42f6-42c9296960ff:~$ sudo -i
-
 root@36849489-b8cd-4214-42f6-42c9296960ff:~#
+</code></pre>
+
 
 Here is the updated resources view after the Bosh Director is deployed. In my environment, the VM called braavos-368(..) is the new Bosh Director VM. Yours will be named according to your unique storage account name.
 
