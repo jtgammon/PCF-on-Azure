@@ -597,17 +597,19 @@ Please follow the steps below to get the Azure manifest:
   * NOTE: If you encounter an error similar to the following: "Bundler could not find compatible versions for gem "bundler", Just reinstall the Ruby gem manager by running the following command (assuming you are on a Linux based platform):
   * gem install bundler
 2. Use the converter
-  * bundle exec converter --name cf \
-  *            --swap-ip-ranges IP-RANGE-TO-SWAP \
-  *            --domain YOUR-DOMAIN \
-  *            --sanitize-partition \
-  *            --director-uuid YOUR-BOSH-DIRECTOR-UUID \
-  *            --manifest VSPHERE-MANIFEST-FILE \
-  *            --dns DNS-IP \
-  *            --stemcell_version STEMCELL-VERSION \
-  *            --network-name BOSH-SUBNET:CLOUDFOUNDRY-SUBNET \
-  *            --output WHERE-TO-PUT-THE-CONVERTED-MANIFEST \
-  *            --public_ip INSTALLATION-PUBLIC-IP
+<pre><code>
+> bundle exec converter --name cf \
+           --swap-ip-ranges IP-RANGE-TO-SWAP \
+           --domain YOUR-DOMAIN \
+           --sanitize-partition \
+           --director-uuid YOUR-BOSH-DIRECTOR-UUID \
+           --manifest VSPHERE-MANIFEST-FILE \
+           --dns DNS-IP \
+           --stemcell_version STEMCELL-VERSION \
+           --network-name BOSH-SUBNET:CLOUDFOUNDRY-SUBNET \
+           --output WHERE-TO-PUT-THE-CONVERTED-MANIFEST \
+           --public_ip INSTALLATION-PUBLIC-IP
+</code></pre>
 
 Replace the values of the parameters as follows: 
 
@@ -755,7 +757,10 @@ Similar to deploying PCF above, we need to **modify the manifest**,** **upload o
 > bosh -n deployment rabbitmq.yml
 > bosh -n deploy
 > bosh -n run errand broker-registrar
+</code></pre>
+
 # Deploy Spring Cloud Services
+<pre><code>
 > bosh target <bosh-director-ip>
 > bosh -n deployment spring-cloud.yml
 > bosh -n deploy
