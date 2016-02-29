@@ -337,72 +337,56 @@ Click this link to deploy the template:
 
 <img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_8.png">
 
-### Virtual Machine Name
-
+### Virtual Machine
 The template will create a jump box on the Bosh network. In this example it will be called "devbox". The VM will have 1 core, 3.5GB RAM, and 50GB of SSD storage. This jumpbox will be used to deploy the Bosh Director and CloudFoundry. The jumpbox will have a public IP that can be used to SSH, and the template form allows the username and password to be specified.
 
 ### Admin Username
-
 A username for the jump box VM.
 
 ### SSH Key Data
-
 Provide a public key for the jump box VM. You should generate a private/public key pair, and keep the private key securely on your local machine. The parameter sshKeyData should be a string which starts with ssh-rsa.
 
 Use ssh-keygen to create a 2048-bit RSA public and private key files, and unless you have a specific location or specific names for the files, accept the default location and name.
 
-> ssh-keygen -t rsa -b 2048
+    > ssh-keygen -t rsa -b 2048
 
 ### Tenant ID
-
 Specify the tenant ID for the subscription to be used. This can be found from the Azure CLI.
 
-**> azure account list**
+    > azure account list
 
+<pre><code>
 info:    Executing command **account list**
-
 data:    Name        Id                                    Current  State  
-
 data:    ----------  ------------------------------------  -------  -------
-
 data:    Free Trial  8a1f4887-57d2-4efa-a4d0-b3457ad46110  true     Enabled
-
 info:    **account list** command **OK**
-
 **> azure account show 8a1f4887-57d2-4efa-a4d0-b3457ad46110**
-
 info:    Executing command **account show**
-
 data:    Name                        : Free Trial
-
 data:    ID                          : 8a1f4887-57d2-4efa-a4d0-b3457ad46110
-
 data:    State                       : Enabled
-
 data:    Tenant ID                   : 7d5503c5-af32-4c2f-bec4-a7bb3f3fa165
-
 data:    Is Default                  : true
+</code></pre>
+
 
 ### Client ID
+The ARM template needs Active Directory permissions to create cloud resources as an application with "contributor" privileges. This means that an application account must have been created in Active Directory in the previous step ([Creating a Service Principal](#heading=h.i25sqeulpjgs)). The password that was specified in that step will be the Client-Secret. The Client ID can be found from the Azure CLI.
 
-The ARM template needs Active Directory permissions to create cloud resources as an application with "contributor" privileges. This means that an application account must have been created in Active Directory in the previous step ([Creating a Service Principal](https://docs.google.com/document/d/1gq5wbVCuZI_RQUTXBC2wlfDpbyXfa2YUS4vJ4--b8ls/edit?ts=56b21914#heading=h.i25sqeulpjgs)). The password that was specified in that step will be the Client-Secret. The Client ID can be found from the Azure CLI.
+    > azure ad app list
 
-**> azure ad app list**
-
+<pre><code>
 info:    Executing command **ad app list**
-
 + Listing applications                                                         
-
 data:    AppId:                   ec864f4a-ec9d-40ce-9f40-57b58f969aee
-
 data:    ObjectId:                704ee950-90e5-4295-a501-5c7a75a3f596
-
 data:    DisplayName:             pcf
-
 data:    IdentifierUris:          0=http://BOSHAzureCPI
+</code></pre>
+
 
 ### Auto-deploy Bosh
-
 This is optional. Leave it disabled if you want to see more detail about the install process, or enable it to hurry things along a little. If you decide to enable this field, please skip the next section on Deploying Bosh.
 
 ### Deploy the ARM Template
