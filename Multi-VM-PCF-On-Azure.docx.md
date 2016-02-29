@@ -468,7 +468,7 @@ To start the deployment, execute the deploy_bosh script from the devbox.
 
 The deployment will take about 30 minutes. Once the deployment finished, there will be a Bosh Director VM as shown below.
 
-<img src="/public/2rhw65Z3QsQyC3ROMCOI5A_img_11.png">
+<img src="/public/xUtrEM6WO3aobUMV8wT0hw_img_11.png">
 
 SSH from the devbox to the new Bosh Director VM to confirm everything is working.
 
